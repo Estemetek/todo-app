@@ -1,121 +1,46 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState([{"id": 1, "text": "Learn React", "done": false}])
+  // to test if the state is working:
+  console.log(todos)
+
+  // state variable for empty input field
+  const [inputText, setInputText] = useState("")
+
+  // state variable for id number starting from 2, since the first todo item has id 1
+  //i wanted to try declaring the id variables myself first
+  const [id, setID] = useState(2)
+
+  //function that combines arrays 'todos' and 'inputText' into a new array 'setTodos'
+  const addTodo = () => {
+    setTodos([...todos, {id: id, text: inputText, done: false}])
+    //increments the id number by 1 for each new todo item added to the list
+    setID(id+1)
+    // refreshes the inpute field empty after adding the todo item to the list
+    setInputText("")
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        HELLO!!!
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div>
+      <h1>Todo List</h1>
 
-      <div className="ticks"></div>
+      {/* takes user input by making use of the new state variable "inputText" */}
+      <input
+        value={inputText}
+        onChange={(e) => setInputText(e.target.value)}
+      />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      {/* passes the function 'addTodo' as a reference to the onClick event of the button, 
+      so that when the button is clicked, the function is executed and a new todo item is added to the list */}
+      <button onClick={addTodo}> ADD ITEM </button>
+      <ul>
+        {/* wrap the .map() in {} to write JavaScript syntax inside the return() of JSX*/}
+        {/* NO MORE STATEMENTS inside return(), ONLY EXPRESSIONS */}
+        {todos.map(todo => <li key={todo.id}>{todo.text}</li>)}
+      </ul>
+    </div>
   )
 }
 
