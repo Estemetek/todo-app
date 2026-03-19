@@ -13,6 +13,16 @@ function App() {
   //i wanted to try declaring the id variables myself first
   const [id, setID] = useState(2)
 
+  //state variable for filtering, with "all" as the default value
+  const [filter, setFilter] = useState("all")
+
+  //variable that holds the result of filtering the 'todos' array based on the value of the 'filter' state variable
+  const filteredTodos = todos.filter(todo => {
+    if (filter === "all") return true
+    if (filter === "active") return !todo.done
+    if (filter === "completed") return todo.done
+  })
+
   //function that combines arrays 'todos' and 'inputText' into a new array 'setTodos'
   const addTodo = () => {
     if (inputText.trim() === "") return //guard clause to check if the input field is empty and does not add to the list if it is empty
@@ -37,6 +47,10 @@ function App() {
     <div>
       <h1>Todo List</h1>
 
+      <button onClick={() => setFilter("all")}>all</button>
+      <button onClick={() => setFilter("active")}>active</button>
+      <button onClick={() => setFilter("completed")}>completed</button>
+
       {/* takes user input by making use of the new state variable "inputText" */}
       <input
         value={inputText}
@@ -49,7 +63,7 @@ function App() {
       <ul>
         {/* wrap the .map() in {} to write JavaScript syntax inside the return() of JSX*/}
         {/* NO MORE STATEMENTS inside return(), ONLY EXPRESSIONS */}
-        {todos.map(todo => 
+        {filteredTodos.map(todo => 
           <li key={todo.id}>
             <input type="checkbox" checked={todo.done} onChange={() => toggleTodo(todo.id)} />
             {todo.text}
