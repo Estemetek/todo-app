@@ -1,8 +1,12 @@
 import { useState } from 'react'
+import { useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [todos, setTodos] = useState([{"id": 1, "text": "Learn React", "done": false}])
+  // const [todos, setTodos] = useState([{"id": 1, "text": "Learn React", "done": false}])
+  //revised tate varuiable so that it retrieves the string from local storage and converts it back to an array
+  // returns an empty array if there is no data in local storage
+  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem("todos")) || [])
   // to test if the state is working:
   console.log(todos)
 
@@ -42,6 +46,12 @@ function App() {
   const deleteTodo = (id) => {
     setTodos(todos.filter(todo => todo.id !== id))
   }
+
+  useEffect(() => {
+    //saves the current state of the 'todos' array to the local storage of the browser as a string
+    localStorage.setItem("todos", JSON.stringify(todos))
+  }, [todos]) //the useEffect hook will run whenever the 'todos' state variable changes, 
+  // ensuring that the local storage is always up to date with the latest state
 
   return (
     <div>
