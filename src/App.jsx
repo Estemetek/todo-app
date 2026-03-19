@@ -15,11 +15,22 @@ function App() {
 
   //function that combines arrays 'todos' and 'inputText' into a new array 'setTodos'
   const addTodo = () => {
+    if (inputText.trim() === "") return //guard clause to check if the input field is empty and does not add to the list if it is empty
     setTodos([...todos, {id: id, text: inputText, done: false}])
     //increments the id number by 1 for each new todo item added to the list
     setID(id+1)
     // refreshes the inpute field empty after adding the todo item to the list
     setInputText("")
+  }
+
+  //function that toggles the 'done' property of a todo item (true or false)
+  const toggleTodo = (id) => {
+    setTodos(todos.map(todo => todo.id === id ? {...todo, done: !todo.done} : todo))
+  }
+
+  //function that deletes a todo item from the list by filtering out the item with the matching id
+  const deleteTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id))
   }
 
   return (
@@ -38,7 +49,12 @@ function App() {
       <ul>
         {/* wrap the .map() in {} to write JavaScript syntax inside the return() of JSX*/}
         {/* NO MORE STATEMENTS inside return(), ONLY EXPRESSIONS */}
-        {todos.map(todo => <li key={todo.id}>{todo.text}</li>)}
+        {todos.map(todo => 
+          <li key={todo.id}>
+            <input type="checkbox" checked={todo.done} onChange={() => toggleTodo(todo.id)} />
+            {todo.text}
+            <button onClick={() => deleteTodo(todo.id)}>Delete Task</button>
+          </li>)}
       </ul>
     </div>
   )
