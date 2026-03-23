@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
-import './App.css'
 
 function App() {
   // const [todos, setTodos] = useState([{"id": 1, "text": "Learn React", "done": false}])
@@ -54,32 +53,64 @@ function App() {
   // ensuring that the local storage is always up to date with the latest state
 
   return (
-    <div>
-      <h1>Todo List</h1>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center flex-col">
+      <div className="bg-white rounded-xl shadow-md p-8 w-full max-w-md">
+        <h1 className="text-2xl font-semibold text-gray-800 mb-6">My Tasks</h1>
 
-      <button onClick={() => setFilter("all")}>all</button>
-      <button onClick={() => setFilter("active")}>active</button>
-      <button onClick={() => setFilter("completed")}>completed</button>
+        {/* makes use of conditional styling for these buttons since class changes based on state */}
+        <div className="flex gap-2 mb-6">
+          <button 
+            className={`px-4 py-1.5 rounded-full text-sm ${
+              filter === "all" 
+                ? "bg-indigo-500 text-white" 
+                : "border border-gray-200 text-gray-500"
+            }`} 
+            onClick={() => setFilter("all")}>All</button>
+          <button className={`px-4 py-1.5 rounded-full text-sm ${
+              filter === "active" 
+                ? "bg-indigo-500 text-white" 
+                : "border border-gray-200 text-gray-500"
+            }`}  
+            onClick={() => setFilter("active")}>Active</button>
+          <button className={`px-4 py-1.5 rounded-full text-sm ${
+              filter === "completed" 
+                ? "bg-indigo-500 text-white" 
+                : "border border-gray-200 text-gray-500"
+            }`} 
+            onClick={() => setFilter("completed")}>Completed</button>
+        </div>
 
-      {/* takes user input by making use of the new state variable "inputText" */}
-      <input
-        value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
-      />
+        {/* takes user input by making use of the new state variable "inputText" */}
+        <div className="flex gap-2 mb-6">
+          <input
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            className="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-sm outline-none"
+          />
 
-      {/* passes the function 'addTodo' as a reference to the onClick event of the button, 
-      so that when the button is clicked, the function is executed and a new todo item is added to the list */}
-      <button onClick={addTodo}> ADD ITEM </button>
-      <ul>
-        {/* wrap the .map() in {} to write JavaScript syntax inside the return() of JSX*/}
-        {/* NO MORE STATEMENTS inside return(), ONLY EXPRESSIONS */}
-        {filteredTodos.map(todo => 
-          <li key={todo.id}>
-            <input type="checkbox" checked={todo.done} onChange={() => toggleTodo(todo.id)} />
-            {todo.text}
-            <button onClick={() => deleteTodo(todo.id)}>Delete Task</button>
-          </li>)}
-      </ul>
+          {/* passes the function 'addTodo' as a reference to the onClick event of the button, 
+          so that when the button is clicked, the function is executed and a new todo item is added to the list */}
+          <button onClick={addTodo} className="bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium"> ADD ITEM </button>
+        </div>
+        <ul className="flex flex-col gap-2 list-none">
+          {/* wrap the .map() in {} to write JavaScript syntax inside the return() of JSX*/}
+          {/* NO MORE STATEMENTS inside return(), ONLY EXPRESSIONS */}
+          {filteredTodos.map(todo => 
+            <li key={todo.id} className="flex items-center gap-3 px-4 py-3 border border-gray-100 rounded-xl">
+              <input type="checkbox" checked={todo.done} onChange={() => toggleTodo(todo.id)} />
+              <span className={`flex-1 text-sm ${
+                todo.done ? "line-through text-gray-400" : "text-gray-700"
+              }`}>
+                {todo.text}
+              </span>
+              <button 
+                className="text-gray-300 hover:text-red-400 text-lg leading-none"
+                onClick={() => deleteTodo(todo.id)}>
+                X
+              </button>
+            </li>)}
+        </ul>
+      </div>
     </div>
   )
 }
