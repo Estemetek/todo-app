@@ -5,7 +5,9 @@ function App() {
   // const [todos, setTodos] = useState([{"id": 1, "text": "Learn React", "done": false}])
   //revised tate varuiable so that it retrieves the string from local storage and converts it back to an array
   // returns an empty array if there is no data in local storage
-  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem("todos")) || [])
+  const [todos, setTodos] = useState(() => {
+    return JSON.parse(localStorage.getItem("todos")) || []
+  })
   // to test if the state is working:
   console.log(todos)
 
@@ -14,7 +16,10 @@ function App() {
 
   // state variable for id number starting from 2, since the first todo item has id 1
   //i wanted to try declaring the id variables myself first
-  const [id, setID] = useState(2)
+  const [id, setID] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem("todos")) || []
+    return saved.length > 0 ? Math.max(...saved.map(t => t.id)) + 1 : 1
+  })
 
   //state variable for filtering, with "all" as the default value
   const [filter, setFilter] = useState("all")
@@ -57,6 +62,19 @@ function App() {
       <div className="bg-white rounded-xl shadow-md p-8 w-full max-w-md">
         <h1 className="text-2xl font-semibold text-gray-800 mb-6">My Tasks</h1>
 
+        {/* takes user input by making use of the new state variable "inputText" */}
+        <div className="flex gap-2 mb-6">
+          <input
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            className="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-sm outline-none"
+          />
+
+          {/* passes the function 'addTodo' as a reference to the onClick event of the button, 
+          so that when the button is clicked, the function is executed and a new todo item is added to the list */}
+          <button onClick={addTodo} className="bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium"> ADD ITEM </button>
+        </div>
+
         {/* makes use of conditional styling for these buttons since class changes based on state */}
         <div className="flex gap-2 mb-6">
           <button 
@@ -80,18 +98,6 @@ function App() {
             onClick={() => setFilter("completed")}>Completed</button>
         </div>
 
-        {/* takes user input by making use of the new state variable "inputText" */}
-        <div className="flex gap-2 mb-6">
-          <input
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            className="flex-1 border border-gray-200 rounded-lg px-4 py-2 text-sm outline-none"
-          />
-
-          {/* passes the function 'addTodo' as a reference to the onClick event of the button, 
-          so that when the button is clicked, the function is executed and a new todo item is added to the list */}
-          <button onClick={addTodo} className="bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium"> ADD ITEM </button>
-        </div>
         <ul className="flex flex-col gap-2 list-none">
           {/* wrap the .map() in {} to write JavaScript syntax inside the return() of JSX*/}
           {/* NO MORE STATEMENTS inside return(), ONLY EXPRESSIONS */}
